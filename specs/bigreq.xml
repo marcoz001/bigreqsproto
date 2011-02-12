@@ -206,7 +206,9 @@
 <chapter id='encoding'>
 <title>Encoding</title>
 
-<para>Please refer to the X11 Protocol Encoding document as this document uses conventions established there.</para>
+<para>Please refer to the
+<olink targetdoc='libX11' targetptr='libX11'>X11 Protocol Encoding</olink>
+document as this document uses conventions established there.</para>
 
 <para>The name of this extension is &ldquo;BIG-REQUESTS&rdquo;.</para>
 

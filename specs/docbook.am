@@ -1,0 +1,47 @@
+#
+# Generate output formats for a single DocBook/XML with/without chapters
+#
+# Variables set by the calling Makefile:
+# shelf:    the location where the docs/specs are installed. Typically $(docdir)
+# docbook:  the main DocBook/XML file, no chapter, appendix or image files
+# chapters: all files pulled in by an XInclude statement and images.
+#
+
+# DocBook/XML generated output formats to be installed
+# This variable is initially empty and appended to by the included makefile
+shelf_DATA =
+
+# DocBook/XML file with chapters, appendix and images it includes
+dist_shelf_DATA = $(docbook) $(chapters)
+
+# DocBook/XML generated chunked html cannot be installed by Automake
+# This variable is initially empty and appended to by the included makefile
+noinst_DATA =
+
+# Gneerate DocBook/XML output formats with or without stylesheets
+include formats.am
+
+# Generate documents cross-reference target databases
+# This is only possible if the xorg-sgml-doctools package is installed
+if HAVE_STYLESHEETS
+if HAVE_XSLTPROC
+
+# The location where all cross reference databases are installed
+sgmldbsdir = $(XORG_SGML_PATH)/X11/dbs
+
+# DocBook/XML generated document cross-reference database
+# This variable is initially empty and appended to by the included makefile
+sgmldbs_DATA =
+
+# Generate DocBook/XML document cross-reference database
+include formats-xref.am
+
+endif HAVE_XSLTPROC
+endif HAVE_STYLESHEETS
+
+CLEANFILES =		\
+	$(shelf_DATA)	\
+	$(sgmldbs_DATA)
+
+clean-local:
+	$(AM_V_at)rm -rf $(DESTDIR)html

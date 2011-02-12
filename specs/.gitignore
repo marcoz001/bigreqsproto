@@ -2,3 +2,5 @@
 *.ps
 *.pdf
 *.txt
+*.db
+html/

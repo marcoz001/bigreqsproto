@@ -1,0 +1,31 @@
+# Flags for the XSL Transformation processor generating xref target databases
+XSLTPROC_FLAGS = \
+	--stringparam targets.filename "$@" \
+	--stringparam collect.xref.targets "only"
+
+noinst_DATA += html/$(docbook:.xml=.html.db)
+html/%.html.db: $(docbook) $(chapters)
+	$(AM_V_GEN)$(XSLTPROC) $(XSLTPROC_FLAGS) \
+	http://docbook.sourceforge.net/release/xsl/current/html/profile-chunk.xsl $<
+
+sgmldbs_DATA += $(docbook:.xml=.html.db)
+%.html.db: $(docbook)  $(chapters)
+	$(AM_V_GEN)$(XSLTPROC) $(XSLTPROC_FLAGS) \
+	http://docbook.sourceforge.net/release/xsl/current/html/profile-docbook.xsl $<
+
+if HAVE_FOP
+sgmldbs_DATA += $(docbook:.xml=.ps.db) $(docbook:.xml=.pdf.db)
+%.pdf.db: $(docbook) $(chapters)
+	$(AM_V_GEN)$(XSLTPROC) $(XSLTPROC_FLAGS) \
+	http://docbook.sourceforge.net/release/xsl/current/fo/profile-docbook.xsl $<
+%.ps.db: $(docbook) $(chapters)
+	$(AM_V_GEN)$(XSLTPROC) $(XSLTPROC_FLAGS) \
+	http://docbook.sourceforge.net/release/xsl/current/fo/profile-docbook.xsl $<
+endif HAVE_FOP
+
+if HAVE_XMLTO_TEXT
+sgmldbs_DATA += $(docbook:.xml=.txt.db)
+%.txt.db: $(docbook)  $(chapters)
+	$(AM_V_GEN)$(XSLTPROC) $(XSLTPROC_FLAGS) \
+	http://docbook.sourceforge.net/release/xsl/current/html/profile-docbook.xsl $<
+endif HAVE_XMLTO_TEXT
